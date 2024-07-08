@@ -16,14 +16,13 @@ if (isset($_POST['send'])) {
         curl_setopt($init, CURLOPT_URL, $url);
         curl_setopt($init, CURLOPT_RETURNTRANSFER, true);
         $res = curl_exec($init);
+
         if ($e = curl_error($init)) {
             echo $e;
         } else {
             $decoded = json_decode($res);
-            $_SESSION['cityName'] = $decoded->name;
-            $_SESSION['temp'] = round($decoded->main->temp - 275.15);
-            $_SESSION['wind'] = round($decoded->wind->speed);
-            $_SESSION['description'] = $decoded->weather[0]->description;
+            $weatherData = $decoded;
+            $_SESSION['weatherData'] = $decoded;
             header("Location:index.php");
         }
     }
