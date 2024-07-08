@@ -1,12 +1,3 @@
-<?php
-session_start();
-include_once("action.php");
-global $weatherData;
-if (isset($_SESSION['weatherData'])) {
-    $weatherData = $_SESSION['weatherData'];
-}
-
-?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,34 +9,27 @@ if (isset($_SESSION['weatherData'])) {
     <title>Weather</title>
 </head>
 <body>
-<form action="action.php" method="post">
+<form action="action.php" method="get">
     <label>
         <input type="text" name="city" placeholder="Write City Name" class="text">
     </label>
     <input type="submit" value="SEND" name="send" class="send">
 </form>
 
-<div class="card">
+<?php
+if (isset($_GET['error'])) {
+    echo '<div class="error">' . htmlspecialchars($_GET['error']) . '</div>';
+}
 
-    <div class="card">
-        <span style="color: red">
-            <?php
-            if (isset($_SESSION['input']['error'])) {
-                echo $_SESSION['input']['error'];
-            } else {
-                unset($_SESSION['input']['error']);
-            }
-            ?>
-        </span>
-        <?php if (isset($weatherData)): ?>
-            <h1>Country Name: <span><?= htmlspecialchars($weatherData->name); ?></span></h1>
-            <h1>Temperature is: <span><?= round($weatherData->main->temp - 273.15); ?>°C</span></h1>
-            <h1>Wind Speed is: <span><?= round($weatherData->wind->speed); ?> km/h</span></h1>
-            <h1>Clouds Type is: <span><?= htmlspecialchars($weatherData->weather[0]->description); ?></span></h1>
-        <?php endif; ?>
-    </div>
-</div>
-
+if (isset($_GET['name']) && isset($_GET['temp']) && isset($_GET['speed']) && isset($_GET['description'])) {
+    echo '<div class="card">';
+    echo '<h1>Country Name: <span>' . htmlspecialchars($_GET['name']) . '</span></h1>';
+    echo '<h1>Temperature is: <span>' . round($_GET['temp'] ) . '°C</span></h1>';
+    echo '<h1>Wind Speed is: <span>' . round($_GET['speed']) . ' km/h</span></h1>';
+    echo '<h1>Clouds Type is: <span>' . htmlspecialchars($_GET['description']) . '</span></h1>';
+    echo '</div>';
+}
+?>
 
 </body>
 </html>
